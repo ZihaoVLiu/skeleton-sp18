@@ -8,31 +8,31 @@ public class ArrayDeque<T> {
     /** Creates an empty array deque */
     public ArrayDeque() {
         array = (T[]) new Object [INIT_CAPACITY];
-        nextFirst = 0;
-        nextLast = 1;
+        nextFirst = 4;
+        nextLast = 5;
         size = 0;
     }
 
     /** Change the index */
-    public int addIndex(int index){
-        return (index + 1 + array.length) % array.length;
+    private int addIndex(int index) {
+        return (index + 1) % array.length;
     }
 
-    public int minusIndex(int index){
+    private int minusIndex(int index) {
         return (index - 1 + array.length) % array.length;
     }
 
     /** resize the array */
-    public void resize(int CAPACITY) {
-        T[] newArray = (T[]) new Object [CAPACITY];
+    private void resize(int capacity) {
+        T[] newArray = (T[]) new Object [capacity];
 
         int currIndex = addIndex(nextFirst);
-        for (int i = 0; i < array.length; i++){
+        for (int i = 0; i < size; i++){
             newArray[i] = array[currIndex];
             currIndex = addIndex(currIndex);
         }
         array = newArray;
-        nextFirst = CAPACITY - 1;
+        nextFirst = capacity - 1;
         nextLast = size;
     }
 
@@ -47,8 +47,8 @@ public class ArrayDeque<T> {
     }
 
     /** Adds an item of type T to the back of the deque. */
-    public void addLast(T item){
-        if (size == array.length){
+    public void addLast(T item) {
+        if (size == array.length) {
             resize(2 * INIT_CAPACITY);
         }
         array[nextLast] = item;
@@ -57,7 +57,7 @@ public class ArrayDeque<T> {
     }
 
     /** Returns true if deque is empty, false otherwise. */
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return size == 0;
     }
 
@@ -67,7 +67,7 @@ public class ArrayDeque<T> {
     }
 
     /** Prints the items in the deque from first to last, separated by a space. */
-    public void printDeque(){
+    public void printDeque() {
         int currIndex = addIndex(nextFirst);
         while (currIndex != nextLast){
             System.out.print(array[currIndex] + " ");
@@ -76,7 +76,8 @@ public class ArrayDeque<T> {
         System.out.println();
     }
 
-    /** Removes and returns the item at the front of the deque. If no such item exists, returns null. */
+    /** Removes and returns the item at the front of the deque.
+     * If no such item exists, returns null. */
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -91,7 +92,8 @@ public class ArrayDeque<T> {
         return value;
     }
 
-    /** Removes and returns the item at the back of the deque. If no such item exists, returns null. */
+    /** Removes and returns the item at the back of the deque.
+     * If no such item exists, returns null. */
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -114,5 +116,21 @@ public class ArrayDeque<T> {
         }
         index = (index + addIndex(nextFirst) + array.length) % array.length;
         return array[index];
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Running tests.\n");
+        ArrayDeque<Integer> aa1 = new ArrayDeque<Integer>();
+        aa1.addFirst(100);
+        aa1.addFirst(50);
+        aa1.addLast(200);
+        aa1.addLast(200);
+        aa1.addLast(200);
+        aa1.addLast(200);
+        aa1.addLast(300);
+        aa1.addLast(44);
+        System.out.println(aa1.get(7));
+        aa1.printDeque();
+        System.out.println(aa1.size());
     }
 }
