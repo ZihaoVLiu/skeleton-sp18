@@ -4,7 +4,6 @@ public class ArrayDeque<T> {
     private int nextFirst;
     private int nextLast;
     private static int INIT_CAPACITY = 8;
-    private static int RFACTOR = 2;
     private static double MIN_USAGE_RATIO = 0.25;
 
     /** Creates an empty array deque.
@@ -28,13 +27,14 @@ public class ArrayDeque<T> {
         }
     }
 
+    private int plusOne(int index) {
+        return (index + 1) % items.length;
+    }
+
     private int minusOne(int index) {
         return (index - 1 + items.length) % items.length;
     }
 
-    private int plusOne(int index) {
-        return (index + 1) % items.length;
-    }
 
     private void resize(int capacity) {
         T[] newArray = (T[]) new Object[capacity];
@@ -53,23 +53,23 @@ public class ArrayDeque<T> {
     /** Adds an item of type T to the front of the deque. */
     public void addFirst(T item) {
         if (size == items.length) {
-            resize(size * RFACTOR);
+            resize(size * 2);
         }
 
         items[nextFirst] = item;
-        size += 1;
         nextFirst = minusOne(nextFirst);
+        size += 1;
     }
 
     /** Adds an item of type T to the back of the deque. */
     public void addLast(T item) {
         if (size == items.length) {
-            resize(size * RFACTOR);
+            resize(size * 2);
         }
 
         items[nextLast] = item;
-        size += 1;
         nextLast = plusOne(nextLast);
+        size += 1;
     }
 
     /** Returns true if deque is empty, false otherwise. */
@@ -88,11 +88,12 @@ public class ArrayDeque<T> {
      *  Once all the items have been printed, print out a new line.
      */
     public void printDeque() {
-        int i = plusOne(nextFirst);
-
-        while (i != nextLast) {
-            System.out.print(items[i] + " ");
-            i = plusOne(i);
+        int counter = 0;
+        int curr = plusOne(nextFirst);
+        while (counter < size){
+            System.out.print(items[curr] + " ");
+            counter += 1;
+            curr = plusOne(curr);
         }
         System.out.println();
     }
@@ -111,7 +112,7 @@ public class ArrayDeque<T> {
         nextFirst = first;
         size -= 1;
 
-        if (items.length >= 16 && size < items.length * MIN_USAGE_RATIO) {
+        if (items.length > 8 && size < items.length * 0.25) {
             resize(items.length / 2);
         }
 
@@ -132,7 +133,7 @@ public class ArrayDeque<T> {
         nextLast = last;
         size -= 1;
 
-        if (items.length >= 16 && size < items.length * MIN_USAGE_RATIO) {
+        if (items.length > 8 && size < items.length * 0.25) {
             resize(items.length / 2);
         }
 
@@ -170,7 +171,8 @@ public class ArrayDeque<T> {
         aa1.addLast(200);
         aa1.addLast(200);
         aa1.addLast(300);
-        System.out.println(aa1.get(7));
+        aa1.addLast(44);
+        System.out.println(aa1.get(0));
         aa1.printDeque();
         System.out.println(aa1.size());
     }
