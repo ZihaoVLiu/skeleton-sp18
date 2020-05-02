@@ -1,20 +1,25 @@
 public class ArrayDeque<T> {
-    private T[] array;
+    private T[] items;
+    private int size;
     private int nextFirst;
     private int nextLast;
-    private int size;
-    private static final int INIT_CAPACITY = 8;
+    private static int INIT_CAPACITY = 8;
+    private static int RFACTOR = 2;
+    private static double MIN_USAGE_RATIO = 0.25;
 
-    /** Creates an empty array deque */
+    /** Creates an empty array deque.
+     *  The starting size of your array should be 8.
+     */
     public ArrayDeque() {
-        array = (T[]) new Object [INIT_CAPACITY];
+        items = (T[]) new Object[INIT_CAPACITY];
+        size = 0;
         nextFirst = 4;
         nextLast = 5;
-        size = 0;
     }
 
+    /** Creates a deep copy of other. */
     public ArrayDeque(ArrayDeque other) {
-        array = (T[]) new Object[INIT_CAPACITY];
+        items = (T[]) new Object[INIT_CAPACITY];
         size = 0;
         nextFirst = 4;
         nextLast = 5;
@@ -23,47 +28,48 @@ public class ArrayDeque<T> {
         }
     }
 
-    /** Change the index */
-    private int addIndex(int index) {
-        return (index + 1) % array.length;
+    private int minusOne(int index) {
+        return (index - 1 + items.length) % items.length;
     }
 
-    private int minusIndex(int index) {
-        return (index - 1 + array.length) % array.length;
+    private int plusOne(int index) {
+        return (index + 1) % items.length;
     }
 
-    /** resize the array */
     private void resize(int capacity) {
         T[] newArray = (T[]) new Object[capacity];
 
-        int curr = addIndex(nextFirst);
+        int curr = plusOne(nextFirst);
         for (int i = 0; i < size; i++) {
-            newArray[i] = array[curr];
-            curr = addIndex(curr);
+            newArray[i] = items[curr];
+            curr = plusOne(curr);
         }
-        array = newArray;
+
+        items = newArray;
         nextFirst = capacity - 1;
         nextLast = size;
     }
 
     /** Adds an item of type T to the front of the deque. */
     public void addFirst(T item) {
-        if (size == array.length){
-            resize((2 * size));
+        if (size == items.length) {
+            resize(size * RFACTOR);
         }
-        array[nextFirst] = item;
+
+        items[nextFirst] = item;
         size += 1;
-        nextFirst = minusIndex(nextFirst);
+        nextFirst = minusOne(nextFirst);
     }
 
     /** Adds an item of type T to the back of the deque. */
     public void addLast(T item) {
-        if (size == array.length) {
-            resize((2 * size));
+        if (size == items.length) {
+            resize(size * RFACTOR);
         }
-        array[nextLast] = item;
+
+        items[nextLast] = item;
         size += 1;
-        nextLast = addIndex(nextLast);
+        nextLast = plusOne(nextLast);
     }
 
     /** Returns true if deque is empty, false otherwise. */
@@ -71,61 +77,79 @@ public class ArrayDeque<T> {
         return size == 0;
     }
 
-    /** Returns the number of items in the deque. */
+    /** Returns the number of items in the deque.
+     *  Must take constant time.
+     */
     public int size() {
         return size;
     }
 
-    /** Prints the items in the deque from first to last, separated by a space. */
+    /** Prints the items in the deque from first to last, separated by a space.
+     *  Once all the items have been printed, print out a new line.
+     */
     public void printDeque() {
-        int currIndex = addIndex(nextFirst);
-        while (currIndex != nextLast){
-            System.out.print(array[currIndex] + " ");
-            currIndex = addIndex(currIndex);
+        int i = plusOne(nextFirst);
+
+        while (i != nextLast) {
+            System.out.print(items[i] + " ");
+            i = plusOne(i);
         }
         System.out.println();
     }
 
     /** Removes and returns the item at the front of the deque.
-     * If no such item exists, returns null. */
+     *  If no such item exists, returns null.
+     */
     public T removeFirst() {
         if (size == 0) {
             return null;
         }
-        nextFirst = addIndex(nextFirst);
-        size -= 1;
-        T value = array[nextFirst];
 
-        if (array.length > INIT_CAPACITY && size < array.length * 0.25) {
-            resize(array.length / 2);
+        int first = plusOne(nextFirst);
+        T firstItem = items[first];
+        items[first] = null;
+        nextFirst = first;
+        size -= 1;
+
+        if (items.length >= 16 && size < items.length * MIN_USAGE_RATIO) {
+            resize(items.length / 2);
         }
-        return value;
+
+        return firstItem;
     }
 
     /** Removes and returns the item at the back of the deque.
-     * If no such item exists, returns null. */
+     *  If no such item exists, returns null.
+     */
     public T removeLast() {
         if (size == 0) {
             return null;
         }
-        nextLast = minusIndex(nextLast);
-        size -= 1;
-        T value = array[nextLast];
 
-        if (array.length > INIT_CAPACITY && size < array.length * 0.25) {
-            resize(array.length / 2);
+        int last = minusOne(nextLast);
+        T lastItem = items[last];
+        items[last] = null;
+        nextLast = last;
+        size -= 1;
+
+        if (items.length >= 16 && size < items.length * MIN_USAGE_RATIO) {
+            resize(items.length / 2);
         }
-        return value;
+
+        return lastItem;
     }
 
     /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
-     * If no such item exists, returns null. Must not alter the deque! */
+     *  If no such item exists, returns null.
+     *  Must not alter the deque and must take constant time.
+     */
     public T get(int index) {
-        if (index > size){
+        if (index > size) {
             return null;
         }
-        index = (index + addIndex(nextFirst)) % array.length;
-        return array[index];
+
+        index = (plusOne(nextFirst) + index) % items.length;
+        return items[index];
     }
 
     public static void main(String[] args) {
@@ -146,7 +170,6 @@ public class ArrayDeque<T> {
         aa1.addLast(200);
         aa1.addLast(200);
         aa1.addLast(300);
-        aa1.addLast(55);
         System.out.println(aa1.get(7));
         aa1.printDeque();
         System.out.println(aa1.size());
