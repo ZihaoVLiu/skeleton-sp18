@@ -13,6 +13,16 @@ public class ArrayDeque<T> {
         size = 0;
     }
 
+    public ArrayDeque(ArrayDeque other) {
+        array = (T[]) new Object[INIT_CAPACITY];
+        size = 0;
+        nextFirst = 4;
+        nextLast = 5;
+        for (int i = 0; i < other.size(); i++) {
+            addLast((T) other.get(i));
+        }
+    }
+
     /** Change the index */
     private int addIndex(int index) {
         return (index + 1) % array.length;
@@ -24,12 +34,12 @@ public class ArrayDeque<T> {
 
     /** resize the array */
     private void resize(int capacity) {
-        T[] newArray = (T[]) new Object [capacity];
+        T[] newArray = (T[]) new Object[capacity];
 
-        int currIndex = addIndex(nextFirst);
-        for (int i = 0; i < size; i++){
-            newArray[i] = array[currIndex];
-            currIndex = addIndex(currIndex);
+        int curr = addIndex(nextFirst);
+        for (int i = 0; i < size; i++) {
+            newArray[i] = array[curr];
+            curr = addIndex(curr);
         }
         array = newArray;
         nextFirst = capacity - 1;
@@ -39,21 +49,21 @@ public class ArrayDeque<T> {
     /** Adds an item of type T to the front of the deque. */
     public void addFirst(T item) {
         if (size == array.length){
-            resize(2 * INIT_CAPACITY);
+            resize(2 * size);
         }
         array[nextFirst] = item;
-        nextFirst = minusIndex(nextFirst);
         size += 1;
+        nextFirst = minusIndex(nextFirst);
     }
 
     /** Adds an item of type T to the back of the deque. */
     public void addLast(T item) {
         if (size == array.length) {
-            resize(2 * INIT_CAPACITY);
+            resize(2 * size);
         }
         array[nextLast] = item;
-        nextLast = addIndex(nextLast);
         size += 1;
+        nextLast = addIndex(nextLast);
     }
 
     /** Returns true if deque is empty, false otherwise. */
@@ -129,6 +139,15 @@ public class ArrayDeque<T> {
         aa1.addLast(200);
         aa1.addLast(300);
         aa1.addLast(44);
+        aa1.addFirst(100);
+        aa1.addFirst(50);
+        aa1.addLast(200);
+        aa1.addLast(200);
+        aa1.addLast(200);
+        aa1.addLast(200);
+        aa1.addLast(300);
+        aa1.addLast(55);
+        aa1.addLast(66);
         System.out.println(aa1.get(7));
         aa1.printDeque();
         System.out.println(aa1.size());
