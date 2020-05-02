@@ -3,7 +3,7 @@ public class ArrayDeque<T> {
     private int nextFirst;
     private int nextLast;
     private int size;
-    private static int INIT_CAPACITY = 8;
+    private static final int INIT_CAPACITY = 8;
 
     /** Creates an empty array deque */
     public ArrayDeque() {
@@ -49,7 +49,7 @@ public class ArrayDeque<T> {
     /** Adds an item of type T to the front of the deque. */
     public void addFirst(T item) {
         if (size == array.length){
-            resize(2 * size);
+            resize((2 * size));
         }
         array[nextFirst] = item;
         size += 1;
@@ -59,7 +59,7 @@ public class ArrayDeque<T> {
     /** Adds an item of type T to the back of the deque. */
     public void addLast(T item) {
         if (size == array.length) {
-            resize(2 * size);
+            resize((2 * size));
         }
         array[nextLast] = item;
         size += 1;
@@ -96,7 +96,7 @@ public class ArrayDeque<T> {
         size -= 1;
         T value = array[nextFirst];
 
-        if (array.length > INIT_CAPACITY && size / array.length < 0.25) {
+        if (array.length > INIT_CAPACITY && size < array.length * 0.25) {
             resize(array.length / 2);
         }
         return value;
@@ -112,7 +112,7 @@ public class ArrayDeque<T> {
         size -= 1;
         T value = array[nextLast];
 
-        if (array.length > INIT_CAPACITY && size / array.length < 0.25) {
+        if (array.length > INIT_CAPACITY && size < array.length * 0.25) {
             resize(array.length / 2);
         }
         return value;
@@ -124,7 +124,7 @@ public class ArrayDeque<T> {
         if (index > size){
             return null;
         }
-        index = (index + addIndex(nextFirst) + array.length) % array.length;
+        index = (index + addIndex(nextFirst)) % array.length;
         return array[index];
     }
 
@@ -147,7 +147,6 @@ public class ArrayDeque<T> {
         aa1.addLast(200);
         aa1.addLast(300);
         aa1.addLast(55);
-        aa1.addLast(66);
         System.out.println(aa1.get(7));
         aa1.printDeque();
         System.out.println(aa1.size());
