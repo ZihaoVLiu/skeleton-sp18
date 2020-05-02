@@ -24,16 +24,16 @@ public class LinkedListDeque<T> {
     /** Adds an item of type T to the back of the deque. */
     public void addFirst(T item){
         Node node = new Node(item, sentinel, sentinel.next);
+        sentinel.next.prev = node;
         sentinel.next = node;
-        sentinel.next.next.prev = sentinel.next;
         size += 1;
     }
 
     /** Adds an item of type T to the front of the deque. */
     public void addLast(T item){
         Node node = new Node(item, sentinel.prev, sentinel);
+        sentinel.prev.next = node;
         sentinel.prev = node;
-        sentinel.prev.prev.next = sentinel.prev;
         size += 1;
     }
 
@@ -117,6 +117,7 @@ public class LinkedListDeque<T> {
         LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
         lld1.addFirst("wocao");
         lld1.addFirst("dashabi");
+        System.out.println(lld1.get(1));
         lld1.printDeque();
         System.out.println(lld1.size());
     }
