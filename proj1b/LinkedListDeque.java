@@ -1,4 +1,4 @@
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private int size;
     private class Node {
         T item;
@@ -22,6 +22,7 @@ public class LinkedListDeque<T> {
     }
 
     /** Adds an item of type T to the back of the deque. */
+    @Override
     public void addFirst(T item) {
         Node node = new Node(item, sentinel, sentinel.next);
         sentinel.next.prev = node;
@@ -30,6 +31,7 @@ public class LinkedListDeque<T> {
     }
 
     /** Adds an item of type T to the front of the deque. */
+    @Override
     public void addLast(T item) {
         Node node = new Node(item, sentinel.prev, sentinel);
         sentinel.prev.next = node;
@@ -38,16 +40,19 @@ public class LinkedListDeque<T> {
     }
 
     /** Returns true if deque is empty, false otherwise. */
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
     /** Returns the number of items in the deque. */
+    @Override
     public int size() {
         return size;
     }
 
     /** Prints the items in the deque from first to last, separated by a space. */
+    @Override
     public void printDeque() {
         Node curr = sentinel.next;
         while (curr != sentinel) {
@@ -59,6 +64,7 @@ public class LinkedListDeque<T> {
 
     /** Removes and returns the item at the front of the deque.
      * If no such item exists, returns null. */
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -72,6 +78,7 @@ public class LinkedListDeque<T> {
 
     /** Removes and returns the item at the back of the deque.
      * If no such item exists, returns null. */
+    @Override
     public T removeLast() {
         if ((isEmpty())) {
             return null;
@@ -85,6 +92,7 @@ public class LinkedListDeque<T> {
 
     /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
      * If no such item exists, returns null. Must not alter the deque! */
+    @Override
     public T get(int index) {
         if (index > size) {
             return null;
@@ -105,15 +113,15 @@ public class LinkedListDeque<T> {
 
     /** getRecursive helper function */
     private T getRecursiveHelper(Node node, int index) {
-        if (index > size){
+        if (index > size) {
             return null;
-        }
-        else if (index == 0) {
+        } else if (index == 0) {
             return node.item;
         }
         return getRecursiveHelper(node.next, index - 1);
     }
 
+    /**
     public static void main(String[] args) {
         System.out.println("Running tests.\n");
         LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
@@ -123,4 +131,5 @@ public class LinkedListDeque<T> {
         lld1.printDeque();
         System.out.println(lld1.size());
     }
+     */
 }
