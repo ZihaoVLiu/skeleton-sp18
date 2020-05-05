@@ -161,6 +161,7 @@ public class ArrayDeque<T> implements Deque<T> {
         return items[index];
     }
 
+    /**
     public static void main(String[] args) {
         System.out.println("Running tests.\n");
         ArrayDeque<Integer> aa1 = new ArrayDeque<Integer>();
@@ -184,4 +185,5 @@ public class ArrayDeque<T> implements Deque<T> {
         aa1.printDeque();
         System.out.println(aa1.size());
     }
+     */
 }
