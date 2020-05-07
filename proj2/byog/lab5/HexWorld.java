@@ -41,11 +41,13 @@ public class HexWorld {
     }
 
     private static TETile randomTile() {
-        int tileNum = RANDOM.nextInt(3);
+        int tileNum = RANDOM.nextInt(5);
         switch (tileNum) {
             case 0: return Tileset.WALL;
             case 1: return Tileset.FLOWER;
-            case 2: return Tileset.WATER;
+            case 2: return Tileset.MOUNTAIN;
+            case 3: return Tileset.GRASS;
+            case 4: return Tileset.TREE;
             default: return Tileset.NOTHING;
         }
     }
@@ -56,7 +58,7 @@ public class HexWorld {
      * @param p two parameter position: x and y
      * @param s the size of hexagon
      */
-    public static void addHexagon(TETile[][] world, Position p, int s){
+    public static void addHexagon(TETile[][] world, Position p, int s, TETile t){
         if (s < 2) {
             throw new IllegalArgumentException("Hexagon must be at least size 2.");
         }
@@ -68,17 +70,44 @@ public class HexWorld {
             if (level < s) {
                 int statyX = p.x;
                 for (int x = statyX - level; x < statyX + s + level; x ++) {
-                    world[x][y] = randomTile;
+                    world[x][y] = t;
                 }
             } else {
                 int startX = p.x - (s - 1);
                 int numX = (s - 1) * 2 + s;
                 for (int x = startX + (level - s); x < startX + numX - (level - s); x++) {
-                    world[x][y] = randomTile;
+                    world[x][y] = t;
                 }
             }
         }
+    }
 
+    public static void drawAColumn(TETile[][] world, int size, Position p, TETile t, int number) {
+        Position[] pList = new Position[number];
+        pList[0] = p;
+        for (int i = 1; i < number; i ++) {
+            pList[i] = new Position(p.x, pList[i-1].y + 2 * size);
+        }
+        for (Position position : pList) {
+            addHexagon(world, position, size, randomTile());
+        }
+    }
+
+    public static void drawTesselation(TETile[][] world, int size, Position p, TETile t) {
+        Position[] pList = new Position[5];
+        pList[0] = p;
+        for (int i = 1; i < 5; i ++) {
+            if (i < 3) {
+                pList[i] = new Position(pList[i-1].x + (2 * size -1), pList[i-1].y - size);
+            } else {
+                pList[i] = new Position(pList[i-1].x + (2 * size -1), pList[i-1].y + size);
+            }
+        }
+        drawAColumn(world, size, pList[0], t, 3);
+        drawAColumn(world, size, pList[1], t, 4);
+        drawAColumn(world, size, pList[2], t, 5);
+        drawAColumn(world, size, pList[3], t, 4);
+        drawAColumn(world, size, pList[4], t, 3);
     }
 
     public static void main(String[] args) {
@@ -88,8 +117,8 @@ public class HexWorld {
         // initialize tiles
         TETile[][] world = initialTile();
         // fills in blocks with given parameters
-        addHexagon(world, new Position(6,6), 5);
-
+        //drawAColumn(world, 3, new Position(10, 10), randomTile(), 6);
+        drawTesselation(world, 4, new Position(10, 10), randomTile());
         ter.renderFrame(world);
     }
 }
