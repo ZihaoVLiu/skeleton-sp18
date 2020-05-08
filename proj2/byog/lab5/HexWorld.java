@@ -58,7 +58,7 @@ public class HexWorld {
      * @param p two parameter position: x and y
      * @param s the size of hexagon
      */
-    public static void addHexagon(TETile[][] world, Position p, int s, TETile t){
+    private static void addHexagon(TETile[][] world, Position p, int s, TETile t){
         if (s < 2) {
             throw new IllegalArgumentException("Hexagon must be at least size 2.");
         }
@@ -82,7 +82,7 @@ public class HexWorld {
         }
     }
 
-    public static void drawAColumn(TETile[][] world, int size, Position p, TETile t, int number) {
+    private static void drawAColumn(TETile[][] world, int size, Position p, TETile t, int number) {
         Position[] pList = new Position[number];
         pList[0] = p;
         for (int i = 1; i < number; i ++) {

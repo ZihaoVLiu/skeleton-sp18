@@ -15,7 +15,8 @@ public class TTFAF {
         try {
             InputStream source = new ByteArrayInputStream(Base64.getDecoder().decode(TTFAF));
             source = new GZIPInputStream(source);
-            GuitarPlayer player = new GuitarPlayer(source);
+            //GuitarPlayer player = new GuitarPlayer(source);
+            GuitarPlayer player = new GuitarPlayer(new java.io.File("katyusha.mid"));
             player.play();
         } catch (IOException e) {
             e.printStackTrace();
@@ -182,4 +183,8 @@ public class TTFAF {
         + "YmW9jm7h7LZBcAqVUWwnOIK8aquEs7JOUD/zY0ArBk31oy1YvqODmDv95xTT7/6IMd58BSczuKTD"
         + "8wUeQqcz27kPJxu43Hxw06TZAE7u4PLOParlZEg8gv6CqnAAZQmXyw9nVEgRopMcLnNTqKj9wwb0"
         + "6zR/5Bb/AT7+4c9/APjxG/j/XQ2yXpqSAA==";
+
+    private static final String ka =
+            "C8B7";
+
 }
