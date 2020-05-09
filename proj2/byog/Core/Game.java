@@ -41,12 +41,13 @@ public class Game {
         TETile[][] finalWorldFrame = initialTile(ter);
 
         LinkedList roomList = LocSizeGenerator.room(0.3);
-        //generateRoom(finalWorldFrame, roomList);
         generateFloor(finalWorldFrame, roomList);
 
         Point[] pointList =  getCenter(roomList);
         generateHallway(finalWorldFrame, pointList);
         addWall(finalWorldFrame, Tileset.WALL);
+
+        System.out.println(toDigit(input));
 
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
@@ -66,6 +67,31 @@ public class Game {
         // get the seed from input String.
         long seed = Long.parseLong(input.substring(1, input.length() - 1));
         return new Random(seed);
+    }
+
+    public Long toDigit(String input){
+        char[] c = input.toCharArray();
+        int count = 0;
+        for (int i = 0; i < input.length(); i++){
+            if (Character.isDigit(c[i])){
+                count++;
+            }
+        }
+        int[] arr = new int[count];
+
+        count = 0;
+        for (int i = 0; i < input.length(); i++) {
+            if (Character.isDigit(c[i])) {
+                arr[count] = Character.getNumericValue(c[i]);
+                count++;
+            }
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i : arr) {
+            builder.append(i);
+        }
+        long requestLong = Long.parseLong(builder.toString());
+        return requestLong;
     }
 
     /**
