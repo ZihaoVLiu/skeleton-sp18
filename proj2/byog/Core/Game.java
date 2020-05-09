@@ -37,7 +37,7 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        RANDOM = inputJudge(input);
+        RANDOM = toDigit(input);
         TETile[][] finalWorldFrame = initialTile(ter);
 
         LinkedList roomList = LocSizeGenerator.room(0.3);
@@ -45,9 +45,8 @@ public class Game {
 
         Point[] pointList =  getCenter(roomList);
         generateHallway(finalWorldFrame, pointList);
-        addWall(finalWorldFrame, Tileset.WALL);
 
-        System.out.println(toDigit(input));
+        addWall(finalWorldFrame, Tileset.WALL);
 
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
@@ -69,7 +68,7 @@ public class Game {
         return new Random(seed);
     }
 
-    public Long toDigit(String input){
+    public Random toDigit(String input){
         char[] c = input.toCharArray();
         int count = 0;
         for (int i = 0; i < input.length(); i++){
@@ -91,7 +90,7 @@ public class Game {
             builder.append(i);
         }
         long requestLong = Long.parseLong(builder.toString());
-        return requestLong;
+        return new Random(requestLong);
     }
 
     /**
