@@ -47,6 +47,7 @@ public class Game {
         generateHallway(finalWorldFrame, pointList);
 
         addWall(finalWorldFrame, Tileset.WALL);
+        addDoor(finalWorldFrame, pointList);
 
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
@@ -186,6 +187,10 @@ public class Game {
         }
     }
 
+    public void addDoor(TETile[][] world,Point[] centers) {
+        Point door = new Point(centers[7].x, centers[7].y);
+        world[door.x][door.y] = Tileset.LOCKED_DOOR;
+    }
 
     public void addWall(TETile[][] world, TETile t){
         int count = 0;
