@@ -32,7 +32,7 @@ public class PlaceRooms {
             int y = RANDOM.nextInt(HEIGHT - h - 3) + 1;
             Room newRoom = new Room(x, y, w, h);
 
-            rooms[ptr] = newRoom;
+            rooms[z] = newRoom;
             for (int i = newRoom.x1; i <= newRoom.x2; i++) {
                 for (int j = newRoom.y1; j <= newRoom.y2; j++) {
                     world[i][j] = t;
@@ -41,8 +41,8 @@ public class PlaceRooms {
 
             PointHere newCenter = newRoom.center;
 
-            if (ptr !=0 ) {
-                PointHere prevCenter = rooms[ptr - 1].center;
+            if (z !=0 ) {
+                PointHere prevCenter = rooms[z - 1].center;
                 Hallway hallway = new Hallway();
                 if (RANDOM.nextInt(2) == 1) {
                     Hallway.hCorridor hc = hallway.new hCorridor(prevCenter.x, newCenter.x, prevCenter.y);
