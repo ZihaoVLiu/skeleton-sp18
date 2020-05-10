@@ -42,7 +42,7 @@ public class Game {
         // drawn if the same inputs had been given to playWithKeyboard().
         //ter.initialize(WIDTH, HEIGHT);
         finalWorldFrame = new TETile[WIDTH][HEIGHT];
-        Long seed = toDigit(input);
+        long seed = toDigit(input);
 
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
