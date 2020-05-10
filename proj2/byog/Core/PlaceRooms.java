@@ -61,7 +61,7 @@ public class PlaceRooms {
             }
             ptr++;
         }
-        int randomDoor = RANDOM.nextInt(roomNumber) - 1;
+        int randomDoor = RANDOM.nextInt(roomNumber);
         door = new PointHere(rooms[randomDoor].center.x, rooms[randomDoor].center.y);
         world[door.x][door.y] = Tileset.LOCKED_DOOR;
     }
