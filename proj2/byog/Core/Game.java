@@ -3,10 +3,7 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
-import edu.princeton.cs.introcs.StdDraw;
 
-import java.awt.*;
-import java.util.LinkedList;
 import java.util.Random;
 
 public class Game {
@@ -14,7 +11,7 @@ public class Game {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    public Point door;
+    public PointHere door;
     public static Random RANDOM;
     public static TETile[][] finalWorldFrame;
 

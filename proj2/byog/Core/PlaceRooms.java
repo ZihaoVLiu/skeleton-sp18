@@ -3,20 +3,19 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import java.awt.*;
 import java.util.Random;
 
 public class PlaceRooms {
     private static int WIDTH = Game.WIDTH;
     private static int HEIGHT = Game.HEIGHT;
     private static int ptr = 0;
-    private static long SEED;
-    private static Random RANDOM;
     private static final int maxRoomNum = 30;
     private static final int minRoomNum = 10;
     private static final int maxRoomSize = 8;
     private static final int minRoomSize = 2;
-    public Point door;
+    public PointHere door;
+    private static long SEED;
+    private static Random RANDOM;
 
     public PlaceRooms(long seed) {
         SEED = seed;
@@ -40,10 +39,10 @@ public class PlaceRooms {
                 }
             }
 
-            Point newCenter = newRoom.center;
+            PointHere newCenter = newRoom.center;
 
             if (ptr !=0 ) {
-                Point prevCenter = rooms[ptr - 1].center;
+                PointHere prevCenter = rooms[ptr - 1].center;
                 Hallway hallway = new Hallway();
                 if (RANDOM.nextInt(2) == 1) {
                     Hallway.hCorridor hc = hallway.new hCorridor(prevCenter.x, newCenter.x, prevCenter.y);
@@ -63,7 +62,7 @@ public class PlaceRooms {
             ptr++;
         }
         int randomDoor = RANDOM.nextInt(roomNumber) - 1;
-        door = new Point(rooms[randomDoor].center.x, rooms[randomDoor].center.y);
+        door = new PointHere(rooms[randomDoor].center.x, rooms[randomDoor].center.y);
         world[door.x][door.y] = Tileset.LOCKED_DOOR;
     }
 
@@ -114,5 +113,4 @@ public class PlaceRooms {
             }
         }
     }
-
 }
