@@ -103,7 +103,6 @@ public class LocSizeGenerator extends Game{
 
 
     public static void main(String[] args) {
-        RANDOM = inputJudge("N9909S");
         LinkedList roomList = room(0.25);
 
         for (int[] i : matrix) {
