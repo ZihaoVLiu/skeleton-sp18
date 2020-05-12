@@ -38,6 +38,7 @@ public class Game {
         if (c == 'n' || c == 'N') {
             ter.initialize(WIDTH, HEIGHT);
             newGame();
+            operation();
             System.exit(0);
         } else if (c == 'l' || c == 'L') {
             TETile[][] object1 = null;
@@ -123,7 +124,7 @@ public class Game {
         door = placeRoom.door;
         player = placeRoom.player;
         //ter.renderFrame(finalWorldFrame);
-        operation();
+        //operation();
         return finalWorldFrame;
     }
 
@@ -280,7 +281,6 @@ public class Game {
         /**
          * should add operation here.
          */
-        operation();
     }
 
     public void operation() {
@@ -290,7 +290,7 @@ public class Game {
                 String fileWorld = "file.ser";
                 String filePlayer = "file1.ser";
                 String fileDoor = "file2.ser";
-                if (c == 'Q') {
+                if (c == 'Q' || c == 'q') {
                     try {
                         //Saving of object in a file
                         FileOutputStream file = new FileOutputStream(fileWorld);
