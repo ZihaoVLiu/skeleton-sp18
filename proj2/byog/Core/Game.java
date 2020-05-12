@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.Random;
 
 public class Game {
-    TERenderer ter = new TERenderer();
+    public TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
@@ -19,9 +19,9 @@ public class Game {
     private int mouseY;
     private boolean win = false;
     public static Random RANDOM;
-    private PointHere door;
-    private PointHere player;
-    private static TETile[][] finalWorldFrame;
+    public PointHere door;
+    public PointHere player;
+    public static TETile[][] finalWorldFrame;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -51,9 +51,9 @@ public class Game {
             try
             {
                 // Reading the object from a file
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
-                ObjectInputStream in1 = new ObjectInputStream(new FileInputStream(filename1));
-                ObjectInputStream in2 = new ObjectInputStream(new FileInputStream(filename2));
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream("/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/out/production/proj2/file.ser"));
+                ObjectInputStream in1 = new ObjectInputStream(new FileInputStream("/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/out/production/proj2/file1.ser"));
+                ObjectInputStream in2 = new ObjectInputStream(new FileInputStream("/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/out/production/proj2/file2.ser"));
 
 
                 // Method for deserialization of object
@@ -218,14 +218,6 @@ public class Game {
         StdDraw.text(WIDTH / 2, (HEIGHT / 2) - 5, "Load Game (L)");
         StdDraw.text(WIDTH / 2, (HEIGHT / 2) - 7, "Quit Game (Q)");
         StdDraw.show();
-    }
-
-    public TETile[][] drawHUD(TETile[][] world, String des) {
-        for (int i = 0; i < des.length(); i++) {
-            char c = des.charAt(i);
-            world[i][HEIGHT-1] = new TETile(c, Color.white, Color.black, "character");
-        }
-        return world;
     }
 
     public void drawHUD(String des) {
