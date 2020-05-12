@@ -51,12 +51,9 @@ public class Game {
             try
             {
                 // Reading the object from a file
-                FileInputStream file = new FileInputStream(filename);
-                ObjectInputStream in = new ObjectInputStream(file);
-                FileInputStream file1 = new FileInputStream(filename1);
-                ObjectInputStream in1 = new ObjectInputStream(file1);
-                FileInputStream file2 = new FileInputStream(filename2);
-                ObjectInputStream in2 = new ObjectInputStream(file2);
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
+                ObjectInputStream in1 = new ObjectInputStream(new FileInputStream(filename1));
+                ObjectInputStream in2 = new ObjectInputStream(new FileInputStream(filename2));
 
 
                 // Method for deserialization of object
@@ -68,11 +65,8 @@ public class Game {
                 door = door1;
 
                 in.close();
-                file.close();
                 in1.close();
-                file1.close();
                 in2.close();
-                file2.close();
 
                 ter.renderFrame(finalWorldFrame);
                 System.out.println("Object has been deserialized ");
@@ -129,6 +123,11 @@ public class Game {
     }
 
     public long toDigit(String input) {
+        if (input.equals("") || input.equals(" ")) {
+            System.out.println(input.length());
+            return 0;
+        }
+
         char[] c = input.toCharArray();
         int count = 0;
         for (int i = 0; i < input.length(); i++) {
