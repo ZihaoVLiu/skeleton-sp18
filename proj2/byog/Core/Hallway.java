@@ -1,7 +1,7 @@
 package byog.Core;
 
 public class Hallway {
-    public static int[][] arr = new int[Game.WIDTH][Game.HEIGHT];
+    static int[][] arr = new int[Game.WIDTH][Game.HEIGHT];
 
     public Hallway() {
         for (int x = 0; x < Game.WIDTH; x++) {

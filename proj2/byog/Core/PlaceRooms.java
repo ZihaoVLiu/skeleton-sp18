@@ -8,12 +8,12 @@ import java.util.Random;
 public class PlaceRooms {
     private static int WIDTH = Game.WIDTH;
     private static int HEIGHT = Game.HEIGHT;
-    private static int ptr = 0;
     private static final int maxRoomNum = 30;
     private static final int minRoomNum = 10;
     private static final int maxRoomSize = 8;
     private static final int minRoomSize = 2;
     public PointHere door;
+    public PointHere player;
     private static long SEED;
     private static Random RANDOM;
 
@@ -41,7 +41,7 @@ public class PlaceRooms {
 
             PointHere newCenter = newRoom.center;
 
-            if (z !=0 ) {
+            if (z != 0) {
                 PointHere prevCenter = rooms[z - 1].center;
                 Hallway hallway = new Hallway();
                 if (RANDOM.nextInt(2) == 1) {
@@ -59,32 +59,37 @@ public class PlaceRooms {
                     }
                 }
             }
-            ptr++;
         }
         int randomDoor = RANDOM.nextInt(roomNumber);
+        int randomPlayer = RANDOM.nextInt(roomNumber);
+        while (randomDoor == randomPlayer) {
+            randomPlayer = RANDOM.nextInt(roomNumber);
+        }
         door = new PointHere(rooms[randomDoor].center.x, rooms[randomDoor].center.y);
         world[door.x][door.y] = Tileset.LOCKED_DOOR;
+        player = new PointHere(rooms[randomPlayer].center.x, rooms[randomPlayer].center.y);
+        world[player.x][player.y] = Tileset.PLAYER;
     }
 
     public void addWall(TETile[][] world, TETile t) {
         int count = 0;
-        for(int i = 0; i < WIDTH; i++){
+        for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++){
-                if (world[i][j].equals(Tileset.FLOOR)){
-                    count=1;
+                if (world[i][j].equals(Tileset.FLOOR)) {
+                    count = 1;
                 }
-                if (count == 1 && world[i][j].equals(Tileset.NOTHING)){
+                if (count == 1 && world[i][j].equals(Tileset.NOTHING)) {
                     count = 0;
                     world[i][j] = t;
                 }
             }
         }
-        for(int j = 0; j < HEIGHT; j++){
-            for (int i = 0; i < WIDTH; i++){
-                if (world[i][j].equals(Tileset.FLOOR)){
-                    count=1;
+        for (int j = 0; j < HEIGHT; j++) {
+            for (int i = 0; i < WIDTH; i++) {
+                if (world[i][j].equals(Tileset.FLOOR)) {
+                    count = 1;
                 }
-                if (count == 1 && world[i][j].equals(Tileset.NOTHING)){
+                if (count == 1 && world[i][j].equals(Tileset.NOTHING)) {
                     count = 0;
                     world[i][j] = t;
                 }
@@ -93,9 +98,9 @@ public class PlaceRooms {
         for(int i = WIDTH - 1; i >= 0; i--) {
             for (int j = HEIGHT - 1; j >= 0 ; j--) {
                 if (world[i][j].equals(Tileset.FLOOR)){
-                    count=1;
+                    count = 1;
                 }
-                if (count == 1 && world[i][j].equals(Tileset.NOTHING)){
+                if (count == 1 && world[i][j].equals(Tileset.NOTHING)) {
                     count = 0;
                     world[i][j] = t;
                 }
@@ -103,10 +108,10 @@ public class PlaceRooms {
         }
         for(int j = HEIGHT - 1; j >= 0; j--) {
             for (int i = WIDTH - 1; i >= 0 ; i--) {
-                if (world[i][j].equals(Tileset.FLOOR)){
-                    count=1;
+                if (world[i][j].equals(Tileset.FLOOR)) {
+                    count = 1;
                 }
-                if (count == 1 && world[i][j].equals(Tileset.NOTHING)){
+                if (count == 1 && world[i][j].equals(Tileset.NOTHING)) {
                     count = 0;
                     world[i][j] = t;
                 }

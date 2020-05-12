@@ -1,13 +1,13 @@
 package byog.Core;
 
-public class PointHere implements java.io.Serializable{
+public class PointHere implements java.io.Serializable {
     public int x;
     public int y;
-    public PointHere(int x, int y){
+    public PointHere(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    public boolean equals(Object p){
+    public boolean equals(Object p) {
         if (this == p) {
             return true;
         }
