@@ -58,8 +58,8 @@ public class Game {
 
 
                 // Method for deserialization of object
-//                object1 = (TETile[][]) in.readObject();
-//                finalWorldFrame = object1;
+                object1 = (TETile[][]) in.readObject();
+                finalWorldFrame = object1;
                 player1 = (PointHere) in1.readObject();
                 player = player1;
                 door1 = (PointHere) in2.readObject();
@@ -113,17 +113,16 @@ public class Game {
                 finalWorldFrame[x][y] = Tileset.NOTHING;
             }
         }
+        ter.renderFrame(finalWorldFrame);
         PlaceRooms placeRoom = new PlaceRooms(seed);
         TETile floor = Tileset.FLOOR;
         placeRoom.addMaze(finalWorldFrame, floor);
         TETile wall = Tileset.WALL;
         placeRoom.addWall(finalWorldFrame, wall);
         door = placeRoom.door;
-
-        drawInitialize();
-
+        player = placeRoom.player;
         ter.renderFrame(finalWorldFrame);
-        drawHUD("cao");
+        operation();
         return finalWorldFrame;
     }
 
