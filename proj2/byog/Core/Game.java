@@ -39,43 +39,50 @@ public class Game {
             newGame();
             System.exit(0);
         } else if (c == 'l' || c == 'L') {
-            TETile[][] inputWorld = null;
-            PointHere inputPlayer;
-            PointHere inputDoor;
-            String fileWorld = "/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/byog/Core/finalWorldFrame.ser";
-            String filePlayer = "/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/byog/Core/player.ser";
-            String fileDoor = "/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/byog/Core/door.ser";
+            TETile[][] object1 = null;
+            PointHere player1 = null;
+            PointHere door1 = null;
+            String filename = "file.ser";
+            String filename1 = "file1.ser";
+            String filename2 ="file2.ser";
+            // Deserialization
+            try
+            {
+                // Reading the object from a file
+                FileInputStream file = new FileInputStream(filename);
+                ObjectInputStream in = new ObjectInputStream(file);
+                FileInputStream file1 = new FileInputStream(filename1);
+                ObjectInputStream in1 = new ObjectInputStream(file1);
+                FileInputStream file2 = new FileInputStream(filename2);
+                ObjectInputStream in2 = new ObjectInputStream(file2);
 
-            try {
-                FileInputStream worldFIS = new FileInputStream(fileWorld);
-                ObjectInputStream worldOIS = new ObjectInputStream(worldFIS);
-                inputWorld = (TETile[][]) worldOIS.readObject();
-                finalWorldFrame = inputWorld;
-                worldOIS.close();
-                worldFIS.close();
 
-                FileInputStream playerFIS = new FileInputStream(filePlayer);
-                ObjectInputStream playerOIS = new ObjectInputStream(playerFIS);
-                inputPlayer = (PointHere) playerOIS.readObject();
-                player = inputPlayer;
-                playerOIS.close();
-                playerFIS.close();
+                // Method for deserialization of object
+//                object1 = (TETile[][]) in.readObject();
+//                finalWorldFrame = object1;
+                player1 = (PointHere) in1.readObject();
+                player = player1;
+                door1 = (PointHere) in2.readObject();
+                door = door1;
 
-                FileInputStream doorFIS = new FileInputStream(fileDoor);
-                ObjectInputStream doorOIS = new ObjectInputStream(doorFIS);
-                inputDoor = (PointHere) doorOIS.readObject();
-                door = inputDoor;
-                doorOIS.close();
-                doorFIS.close();
+                in.close();
+                file.close();
+                in1.close();
+                file1.close();
+                in2.close();
+                file2.close();
 
                 ter.renderFrame(finalWorldFrame);
-                System.out.println("Object has been deserialized.");
+                System.out.println("Object has been deserialized ");
                 operation();
                 System.exit(0);
-
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("IOException or ClassNotFoundException is caught");
+            } catch(IOException ex) {
+                System.out.println("IOException is caught");
+            } catch(ClassNotFoundException ex)
+            {
+                System.out.println("ClassNotFoundException is caught");
             }
+
         } else if (c == 'Q' || c == 'q') {
             System.exit(0);
         }
@@ -280,28 +287,32 @@ public class Game {
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char c = StdDraw.nextKeyTyped();
-                String fileWorld = "/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/byog/Core/finalWorldFrame.ser";
-                String filePlayer = "/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/byog/Core/player.ser";
-                String fileDoor = "/Users/zihaoliu/Desktop/Java/cs61b/skeleton-sp18/proj2/byog/Core/door.ser";
+                String fileWorld = "file.ser";
+                String filePlayer = "file1.ser";
+                String fileDoor = "file2.ser";
                 if (c == 'Q') {
                     try {
-                        FileOutputStream worldFOS = new FileOutputStream(fileWorld);
-                        ObjectOutputStream worldOOS = new ObjectOutputStream(worldFOS);
-                        worldOOS.writeObject(finalWorldFrame);
-                        worldOOS.close();
-                        worldFOS.close();
+                        //Saving of object in a file
+                        FileOutputStream file = new FileOutputStream(fileWorld);
+                        ObjectOutputStream out = new ObjectOutputStream(file);
+                        FileOutputStream file1 = new FileOutputStream(filePlayer);
+                        ObjectOutputStream out1 = new ObjectOutputStream(file1);
+                        FileOutputStream file2 = new FileOutputStream(fileDoor);
+                        ObjectOutputStream out2 = new ObjectOutputStream(file2);
 
-                        FileOutputStream playerFOS = new FileOutputStream(filePlayer);
-                        ObjectOutputStream playerOOS = new ObjectOutputStream(playerFOS);
-                        playerOOS.writeObject(player);
-                        playerOOS.close();
-                        playerFOS.close();
+                        // Method for serialization of object
+                        out.writeObject(finalWorldFrame);
+                        out1.writeObject(player);
+                        out2.writeObject(door);
 
-                        FileOutputStream doorFOS = new FileOutputStream(fileDoor);
-                        ObjectOutputStream doorOOS = new ObjectOutputStream(doorFOS);
-                        doorOOS.writeObject(door);
-                        doorOOS.close();
-                        doorFOS.close();
+                        out.close();
+                        file.close();
+                        out1.close();
+                        file1.close();
+                        out2.close();
+                        file2.close();
+
+                        System.out.println("Object has been serialized");
 
                     } catch (IOException e) {
                         System.out.println("IOException has been caught (Saving)");
