@@ -36,6 +36,7 @@ public class Game {
         }
         char c = StdDraw.nextKeyTyped();
         if (c == 'n' || c == 'N') {
+            ter.initialize(WIDTH, HEIGHT);
             newGame();
             System.exit(0);
         } else if (c == 'l' || c == 'L') {
@@ -104,7 +105,7 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        ter.initialize(WIDTH, HEIGHT);
+        //ter.initialize(WIDTH, HEIGHT);
         finalWorldFrame = new TETile[WIDTH][HEIGHT];
         long seed = toDigit(input);
 
@@ -113,7 +114,7 @@ public class Game {
                 finalWorldFrame[x][y] = Tileset.NOTHING;
             }
         }
-        ter.renderFrame(finalWorldFrame);
+        //ter.renderFrame(finalWorldFrame);
         PlaceRooms placeRoom = new PlaceRooms(seed);
         TETile floor = Tileset.FLOOR;
         placeRoom.addMaze(finalWorldFrame, floor);
@@ -121,7 +122,7 @@ public class Game {
         placeRoom.addWall(finalWorldFrame, wall);
         door = placeRoom.door;
         player = placeRoom.player;
-        ter.renderFrame(finalWorldFrame);
+        //ter.renderFrame(finalWorldFrame);
         operation();
         return finalWorldFrame;
     }
@@ -244,7 +245,7 @@ public class Game {
     }
 
     public void newGame() {
-        ter.initialize(WIDTH, HEIGHT);
+        //ter.initialize(WIDTH, HEIGHT);
         finalWorldFrame = new TETile[WIDTH][HEIGHT];
         String input = "";
         drawSEED(input);
