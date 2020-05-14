@@ -20,12 +20,12 @@ public class PercolationStats {
         double threshold;
         for (int i = 0; i < this.T; i++) {
             model = pf.make(N);
-            threshold = getThreshold(N, model);
+            threshold = getThreshold(N);
             thresholdList[i] = threshold;
         }
     }
 
-    private double getThreshold(int N, Percolation model) {
+    private double getThreshold(int N) {
         double threshold = 0;
         double totalSites = N * N;
         double openSites;
@@ -33,7 +33,9 @@ public class PercolationStats {
             if (model.percolates()) {
                 return threshold;
             }
-            model.open(StdRandom.uniform(N), StdRandom.uniform(N));
+            int row = StdRandom.uniform(N);
+            int column = StdRandom.uniform(N);
+            model.open(row, column);
             openSites = model.numberOfOpenSites();
             threshold =  openSites / totalSites;
         }
@@ -64,5 +66,9 @@ public class PercolationStats {
         double confidenceHigh;
         confidenceHigh = mu + ((CONINTERVEL * sigma) / sqrtT);
         return confidenceHigh;
+    }
+
+    public static void main(String[] args) {
+
     }
 }
