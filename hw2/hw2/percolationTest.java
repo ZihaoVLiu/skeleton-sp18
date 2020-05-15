@@ -36,7 +36,7 @@ public class percolationTest {
         //System.out.println(test.wqu.connected(test.size * test.size, 19));
 
         PercolationFactory pf = new PercolationFactory();
-        PercolationStats testStats = new PercolationStats(2, 1000, pf);
+        PercolationStats testStats = new PercolationStats(1000, 30, pf);
         System.out.println();
         System.out.println("Mean is " + testStats.mean());
         //System.out.println(testStats.confidenceLow());

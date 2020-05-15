@@ -67,8 +67,4 @@ public class PercolationStats {
         confidenceHigh = mu + ((CONINTERVEL * sigma) / sqrtT);
         return confidenceHigh;
     }
-
-    public static void main(String[] args) {
-
-    }
 }

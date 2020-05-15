@@ -159,7 +159,7 @@ public class Game {
         if (c == 'w') {
             if (world[player.x][player.y + 1] != wallTile) {
                 world[player.x][player.y + 1] = playerTile;
-                world[player.x][player.y] =floorTile;
+                world[player.x][player.y] = floorTile;
                 player.y += 1;
                 if (player.equals(door)) {
                     win = true;
@@ -168,7 +168,7 @@ public class Game {
         } else if (c == 's') {
             if (world[player.x][player.y - 1] != wallTile) {
                 world[player.x][player.y - 1] = playerTile;
-                world[player.x][player.y] =floorTile;
+                world[player.x][player.y] = floorTile;
                 player.y -= 1;
                 if (player.equals(door)) {
                     win = true;
@@ -177,7 +177,7 @@ public class Game {
         } else if (c == 'a') {
             if (world[player.x - 1][player.y] != wallTile) {
                 world[player.x - 1][player.y] = playerTile;
-                world[player.x][player.y] =floorTile;
+                world[player.x][player.y] = floorTile;
                 player.x -= 1;
                 if (player.equals(door)) {
                     win = true;
@@ -186,7 +186,7 @@ public class Game {
         } else if (c == 'd') {
             if (world[player.x + 1][player.y] != wallTile) {
                 world[player.x + 1][player.y] = playerTile;
-                world[player.x][player.y] =floorTile;
+                world[player.x][player.y] = floorTile;
                 player.x += 1;
                 if (player.equals(door)) {
                     win = true;
@@ -224,7 +224,7 @@ public class Game {
         Font smallFont = new Font("Monace", Font.BOLD, 20);
         StdDraw.setFont(smallFont);
         StdDraw.setPenColor(Color.white);
-        StdDraw.text(3, HEIGHT-1,  des);
+        StdDraw.text(3, HEIGHT - 1,  des);
         StdDraw.show();
     }
 
@@ -232,7 +232,7 @@ public class Game {
         Font smallFont = new Font("Monaco", Font.CENTER_BASELINE, 20);
         StdDraw.setFont(smallFont);
         StdDraw.setPenColor(Color.white);
-        StdDraw.text(((double)WIDTH)/2, 3.0, "SEED: "+seed);
+        StdDraw.text(((double) WIDTH) / 2, 3.0, "SEED: "+ seed);
         StdDraw.show();
     }
 

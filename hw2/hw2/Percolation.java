@@ -96,4 +96,8 @@ public class Percolation {
     public boolean percolates() { // does the system percolate
         return wqu.connected(virtualU, virtualB);
     }
+
+    public static void main(String[] args) {
+
+    }
 }
