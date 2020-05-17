@@ -77,13 +77,28 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         }
     }
 
+//    private void resize() {
+//        MyHashMap<K, V> temp = new MyHashMap<>(buckets.length * 2);
+//        for (K key : this.keySet()) {
+//            temp.put(key, this.get(key));
+//        }
+//        this.size = temp.size;
+//        this.buckets = temp.buckets;
+//    }
+
     private void resize() {
-        MyHashMap<K, V> temp = new MyHashMap<>(buckets.length * 2);
-        for (K key : this.keySet()) {
-            temp.put(key, this.get(key));
+        ArrayMap<K, V>[] temp = this.buckets;
+        int tempSize = this.size;
+        this.buckets = new ArrayMap[this.buckets.length * 2];
+        this.clear();
+        for (int i = 0; i < temp.length; i++) {
+            for (K tempKey : temp[i].keySet()) {
+                V tempValue = temp[i].get(tempKey);
+                int tempHash = hash(tempKey);
+                this.buckets[tempHash].put(tempKey, tempValue);
+            }
         }
-        this.size = temp.size;
-        this.buckets = temp.buckets;
+        this.size = tempSize;
     }
 
     /* Returns the number of key-value mappings in this map. */
