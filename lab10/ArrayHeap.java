@@ -445,4 +445,25 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         }
     }
 
+    @Test
+    public void testChangePriority() {
+        ArrayHeap<String> pq = new ArrayHeap<>();
+        pq.size = 7;
+        for (int i = 1; i <= 7; i += 1) {
+            pq.contents[i] = new ArrayHeap<String>.Node("x" + i, i*2);
+        }
+        // Change item x6's priority to a low value.
+
+        pq.contents[6].myPriority = 0;
+        System.out.println("PQ before swimming:");
+        System.out.println(pq);
+
+        // Swim x6 upwards. It should reach the root.
+
+        pq.changePriority("x1", 5);
+        System.out.println("PQ after swimming:");
+        System.out.println(pq);
+        assertEquals("x2", pq.contents[1].myItem);
+    }
+
 }
