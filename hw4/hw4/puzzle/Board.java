@@ -122,7 +122,7 @@ public class Board implements WorldState {
         return manhattan();
     }
 
-    public boolean equals(Board y) {
+    public boolean equals(Object y) {
         return this.tiles2D == ((Board) y).tiles2D;
     }
 
