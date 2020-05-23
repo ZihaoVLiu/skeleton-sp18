@@ -66,7 +66,7 @@ public class Rasterer {
         getParamsInfo(params);
         int[] indexes = getCornerLonLatIndex(params);
         double[] latlon = getCornerLonLat(indexes);
-        String renders[][] = getRenders(indexes);
+        String[][] renders = getRenders(indexes);
         ifSuccess();
 
         results.put("render_grid", renders);

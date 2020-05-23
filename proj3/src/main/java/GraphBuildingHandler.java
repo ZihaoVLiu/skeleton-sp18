@@ -2,9 +2,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  Parses OSM XML files using an XML SAX parser. Used to construct the graph of roads for
@@ -38,6 +36,14 @@ public class GraphBuildingHandler extends DefaultHandler {
                     "secondary_link", "tertiary_link"));
     private String activeState = "";
     private final GraphDB g;
+
+    //private static final String[] Number = new String[10];
+    private String wayID;
+    private String ndID;
+    private double maxSpeed = -1;
+    private boolean highway = false;
+    private String wayName = null;
+    private ArrayList<String> nds = null;
 
     /**
      * Create a new GraphBuildingHandler.
@@ -74,14 +80,20 @@ public class GraphBuildingHandler extends DefaultHandler {
 
             /* TODO Use the above information to save a "node" to somewhere. */
             /* Hint: A graph-like structure would be nice. */
+            GraphDB.Node n = new GraphDB.Node(attributes.getValue("id"),
+                    attributes.getValue("lon"), attributes.getValue("lat"));
+            g.addNode(n);
 
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
 //            System.out.println("Beginning a way...");
+            wayID = attributes.getValue("id");
+            nds = new ArrayList<>();
+            System.out.println("WayID is: " + wayID);
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
-            //System.out.println("Id of a node in this way: " + attributes.getValue("ref"));
+//            System.out.println("Id of a node in this way: " + attributes.getValue("ref"));
 
             /* TODO Use the above id to make "possible" connections between the nodes in this way */
             /* Hint1: It would be useful to remember what was the last node in this way. */
@@ -90,6 +102,9 @@ public class GraphBuildingHandler extends DefaultHandler {
             makes this way invalid. Instead, think of keeping a list of possible connections and
             remember whether this way is valid or not. */
 
+            ndID = attributes.getValue("ref");
+            nds.add(ndID);
+
         } else if (activeState.equals("way") && qName.equals("tag")) {
             /* While looking at a way, we found a <tag...> tag. */
             String k = attributes.getValue("k");
@@ -97,12 +112,22 @@ public class GraphBuildingHandler extends DefaultHandler {
             if (k.equals("maxspeed")) {
                 //System.out.println("Max Speed: " + v);
                 /* TODO set the max speed of the "current way" here. */
+//                maxSpeed = Double.parseDouble(v);
+
             } else if (k.equals("highway")) {
-                //System.out.println("Highway type: " + v);
+//                System.out.println("Highway type: " + v);
                 /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
+                for (String type : ALLOWED_HIGHWAY_TYPES) {
+                    if (v.equals(type)) {
+                        highway = true;
+                        break;
+                    }
+                }
+
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
+                wayName = v;
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
         } else if (activeState.equals("node") && qName.equals("tag") && attributes.getValue("k")
@@ -134,6 +159,32 @@ public class GraphBuildingHandler extends DefaultHandler {
             /* Hint1: If you have stored the possible connections for this way, here's your
             chance to actually connect the nodes together if the way is valid. */
 //            System.out.println("Finishing a way...");
+
+            if (highway) {
+                GraphDB.Way w = new GraphDB.Way(wayID);
+                g.addWay(w);
+                // add nds Array List in way instance
+                g.addNdInWay(wayID, nds);
+
+                // add adjacency for each node
+                for (int i = 0; i < nds.size() - 1; i++) {
+                    g.putAdjInNode(nds.get(i), nds.get(i + 1));
+                }
+                for (int i = nds.size() - 1; i > 0; i--) {
+                    g.putAdjInNode(nds.get(i), nds.get(i - 1));
+                }
+
+                if (wayName != null) {
+                    g.addWayName(wayID, wayName);
+                }
+                wayName = null;
+                if (maxSpeed != -1) {
+                    g.addMaxSpeed(wayID, maxSpeed);
+                }
+                maxSpeed = -1;
+
+                highway = false;
+            }
         }
     }
 

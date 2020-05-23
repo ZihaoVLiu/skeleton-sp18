@@ -1,3 +1,4 @@
+import example.CSCourseDB;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -6,7 +7,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -20,6 +21,9 @@ import java.util.ArrayList;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
+
+    private final Map<String, GraphDB.Node> nodes = new LinkedHashMap<>();
+    private final Map<String, GraphDB.Way> ways = new LinkedHashMap<>();
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -40,6 +44,36 @@ public class GraphDB {
             e.printStackTrace();
         }
         clean();
+    }
+
+    void addNode(GraphDB.Node n) {
+        this.nodes.put(n.id, n);
+    }
+
+    void addWay(GraphDB.Way w) {
+        this.ways.put(w.id, w);
+    }
+
+    void addNdInWay(String wayID, ArrayList<String> nds) {
+        this.ways.get(wayID).nds = nds;
+    }
+
+    void addMaxSpeed(String wayID, double maxSpeed) {
+        this.ways.get(wayID).maxSpeed = maxSpeed;
+    }
+
+    void addWayName(String wayID, String name) {
+        this.ways.get(wayID).name = name;
+    }
+
+    void putAdjInNode(String NodeID, String adjID) {
+        if (!this.nodes.get(NodeID).adj.contains(adjID)) {
+            this.nodes.get(NodeID).adj.add(adjID);
+        }
+    }
+
+    void printWays(String wayID) {
+        System.out.println(ways.get(wayID));
     }
 
     /**
@@ -156,4 +190,58 @@ public class GraphDB {
     double lat(long v) {
         return 0;
     }
+
+
+    static class Node {
+        String id;
+        double lat;
+        double lon;
+        ArrayList<String> adj;
+
+        Node(String id, String lat, String lon) {
+            this.id = id;
+            this.lat = Double.parseDouble(lat);
+            this.lon = Double.parseDouble(lon);
+            this.adj = new ArrayList<>();
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("=========Node ID: ").append(id).append("=========\n");
+            sb.append("* lat: ").append(lat).append('\n');
+            sb.append("* lon: ").append(lon).append('\n');
+            return sb.toString();
+        }
+    }
+
+    static class Way {
+        String id;
+        ArrayList<String> nds;
+        double maxSpeed;
+        String name;
+
+        Way(String id) {
+            this.id = id;
+        }
+
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("=========Way ID: ").append(id).append("=========\n");
+            int index = 1;
+            for (String nd: nds){
+                String print = "* nd" + index + ": ";
+                sb.append(print).append(nd).append('\n');
+                index++;
+            }
+            return sb.toString();
+        }
+    }
+
+    public boolean isContain(String id) {
+        return ways.containsKey(id);
+    }
+
 }
