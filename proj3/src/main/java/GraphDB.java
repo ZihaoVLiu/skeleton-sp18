@@ -22,8 +22,8 @@ public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
 
-    private final Map<String, GraphDB.Node> nodes = new LinkedHashMap<>();
-    private final Map<String, GraphDB.Way> ways = new LinkedHashMap<>();
+    private final Map<Long, GraphDB.Node> nodes = new LinkedHashMap<>();
+    private final Map<Long, GraphDB.Way> ways = new LinkedHashMap<>();
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -54,25 +54,25 @@ public class GraphDB {
         this.ways.put(w.id, w);
     }
 
-    void addNdInWay(String wayID, ArrayList<String> nds) {
+    void addNdInWay(Long wayID, ArrayList<Long> nds) {
         this.ways.get(wayID).nds = nds;
     }
 
-    void addMaxSpeed(String wayID, double maxSpeed) {
+    void addMaxSpeed(Long wayID, double maxSpeed) {
         this.ways.get(wayID).maxSpeed = maxSpeed;
     }
 
-    void addWayName(String wayID, String name) {
+    void addWayName(Long wayID, String name) {
         this.ways.get(wayID).name = name;
     }
 
-    void putAdjInNode(String NodeID, String adjID) {
+    void putAdjInNode(Long NodeID, Long adjID) {
         if (!this.nodes.get(NodeID).adj.contains(adjID)) {
             this.nodes.get(NodeID).adj.add(adjID);
         }
     }
 
-    void printWays(String wayID) {
+    void printWays(Long wayID) {
         System.out.println(ways.get(wayID));
     }
 
@@ -92,6 +92,13 @@ public class GraphDB {
      */
     private void clean() {
         // TODO: Your code here.
+        HashSet<Long> temp = new HashSet<>();
+        for (Long key: nodes.keySet()) {
+            if (nodes.get(key).adj.isEmpty()) {
+                temp.add(key);
+            }
+        }
+        nodes.keySet().removeAll(temp);
     }
 
     /**
@@ -100,7 +107,7 @@ public class GraphDB {
      */
     Iterable<Long> vertices() {
         //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return nodes.keySet();
     }
 
     /**
@@ -109,7 +116,7 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return nodes.get(v).adj;
     }
 
     /**
@@ -170,7 +177,21 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        if (nodes.isEmpty()) {
+            System.out.println("The graph is empty, cannot get the closet vertex.");
+            return 0;
+        }
+        ArrayList<Node> nodesArray = new ArrayList<>(nodes.values());
+        long rightID = nodesArray.get(0).id;
+        double minClosest = distance(nodesArray.get(0).lon, nodesArray.get(0).lat, lon, lat);
+        for (Node node : nodesArray) {
+            double temp = distance(node.lon, node.lat, lon, lat);
+            if (temp < minClosest) {
+                minClosest = temp;
+                rightID = node.id;
+            }
+        }
+        return rightID;
     }
 
     /**
@@ -179,7 +200,7 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        return nodes.get(v).lon;
     }
 
     /**
@@ -188,17 +209,17 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        return nodes.get(v).lat;
     }
 
 
     static class Node {
-        String id;
+        Long id;
         double lat;
         double lon;
-        ArrayList<String> adj;
+        ArrayList<Long> adj;
 
-        Node(String id, String lat, String lon) {
+        Node(Long id, String lat, String lon) {
             this.id = id;
             this.lat = Double.parseDouble(lat);
             this.lon = Double.parseDouble(lon);
@@ -216,12 +237,12 @@ public class GraphDB {
     }
 
     static class Way {
-        String id;
-        ArrayList<String> nds;
+        Long id;
+        ArrayList<Long> nds;
         double maxSpeed;
         String name;
 
-        Way(String id) {
+        Way(Long id) {
             this.id = id;
         }
 
@@ -231,7 +252,7 @@ public class GraphDB {
             StringBuilder sb = new StringBuilder();
             sb.append("=========Way ID: ").append(id).append("=========\n");
             int index = 1;
-            for (String nd: nds){
+            for (Long nd: nds){
                 String print = "* nd" + index + ": ";
                 sb.append(print).append(nd).append('\n');
                 index++;

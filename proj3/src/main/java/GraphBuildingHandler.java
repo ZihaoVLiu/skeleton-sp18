@@ -38,12 +38,12 @@ public class GraphBuildingHandler extends DefaultHandler {
     private final GraphDB g;
 
     //private static final String[] Number = new String[10];
-    private String wayID;
-    private String ndID;
+    private Long wayID;
+    private Long ndID;
     private double maxSpeed = -1;
     private boolean highway = false;
     private String wayName = null;
-    private ArrayList<String> nds = null;
+    private ArrayList<Long> nds = null;
 
     /**
      * Create a new GraphBuildingHandler.
@@ -80,17 +80,17 @@ public class GraphBuildingHandler extends DefaultHandler {
 
             /* TODO Use the above information to save a "node" to somewhere. */
             /* Hint: A graph-like structure would be nice. */
-            GraphDB.Node n = new GraphDB.Node(attributes.getValue("id"),
-                    attributes.getValue("lon"), attributes.getValue("lat"));
+            GraphDB.Node n = new GraphDB.Node(Long.parseLong(attributes.getValue("id")),
+                    attributes.getValue("lat"), attributes.getValue("lon"));
             g.addNode(n);
 
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
 //            System.out.println("Beginning a way...");
-            wayID = attributes.getValue("id");
+            wayID = Long.parseLong(attributes.getValue("id"));
             nds = new ArrayList<>();
-            System.out.println("WayID is: " + wayID);
+//            System.out.println("WayID is: " + wayID);
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
 //            System.out.println("Id of a node in this way: " + attributes.getValue("ref"));
@@ -102,7 +102,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             makes this way invalid. Instead, think of keeping a list of possible connections and
             remember whether this way is valid or not. */
 
-            ndID = attributes.getValue("ref");
+            ndID = Long.parseLong(attributes.getValue("ref"));
             nds.add(ndID);
 
         } else if (activeState.equals("way") && qName.equals("tag")) {
