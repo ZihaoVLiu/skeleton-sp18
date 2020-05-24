@@ -22,8 +22,8 @@ public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
 
-    private final Map<Long, GraphDB.Node> nodes = new LinkedHashMap<>();
-    private final Map<Long, GraphDB.Way> ways = new LinkedHashMap<>();
+    public final Map<Long, GraphDB.Node> nodes = new LinkedHashMap<>();
+    public final Map<Long, GraphDB.Way> ways = new LinkedHashMap<>();
 
     /**
      * Example constructor shows how to create and start an XML parser.

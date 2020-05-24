@@ -1,5 +1,6 @@
-import java.util.List;
-import java.util.Objects;
+import edu.princeton.cs.algs4.MinPQ;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +26,60 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+
+        GraphDB.Node s = g.nodes.get(g.closest(stlon, stlat));
+        GraphDB.Node t = g.nodes.get(g.closest(destlon, destlat));
+
+        class Node {
+            GraphDB.Node n;
+            double distance;
+            Node prev;
+            double expectDistance;
+            Node(GraphDB.Node n, double distance, Node prev, double expectDistance) {
+                this.n = n;
+                this.distance = distance;
+                this.prev = prev;
+                this.expectDistance = expectDistance;
+            }
+        }
+
+        Comparator<Node> cmp = new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                if(o1.distance + o1.expectDistance < o2.distance + o2.expectDistance){
+                    return -1;
+                }else if(o1.distance + o1.expectDistance == o2.distance + o2.expectDistance){
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }
+        };
+        MinPQ<Node> fringe = new MinPQ<>(cmp);
+        fringe.insert(new Node(s, 0, null, g.distance(s.id, t.id)));
+        Node n = fringe.delMin();
+
+        while (n.n.id != t.id) {
+            for (long id : g.adjacent(n.n.id)) {
+                if (n.prev != null && id == n.prev.n.id) {
+                    continue;
+                }
+                GraphDB.Node v = g.nodes.get(id);
+                fringe.insert(new Node(v, n.distance + g.distance(id, n.n.id)
+                , n, g.distance(id, t.id)));
+            }
+            n = fringe.delMin();
+        }
+        List<Long> path = new ArrayList<>();
+        Stack<Long> temp = new Stack<>();
+        while (n != null) {
+            temp.push(n.n.id);
+            n = n.prev;
+        }
+        while (!temp.empty()) {
+            path.add(temp.pop());
+        }
+        return path;
     }
 
     /**
