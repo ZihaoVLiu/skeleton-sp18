@@ -1,3 +1,7 @@
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+
 /**
  * Class with 2 ways of doing Counting sort, one naive way and one "better" way
  *
@@ -67,6 +71,44 @@ public class CountingSort {
      */
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+
+        HashSet<Integer> set = new HashSet<Integer>();
+        for (int i : arr) {
+            set.add(i);
+        }
+        Integer[] uniqueArr = new Integer[set.size()];
+        int index = 0;
+        for (Integer value : set) {
+            uniqueArr[index] = value;
+            index++;
+        }
+        for (int i = 0; i < uniqueArr.length; i++) {
+            //外层循环，遍历次数
+            for (int j = 0; j < uniqueArr.length - i - 1; j++) {
+                //内层循环，升序（如果前一个值比后一个值大，则交换）
+                //内层循环一次，获取一个最大值
+                if (uniqueArr[j] > uniqueArr[j + 1]) {
+                    int temp = uniqueArr[j + 1];
+                    uniqueArr[j + 1] = uniqueArr[j];
+                    uniqueArr[j] = temp;
+                }
+            }
+        }
+
+        HashMap<Integer, Integer> count = new HashMap<Integer, Integer>();
+        for (int i = 0; i < arr.length; i++) {
+            if (count.get(arr[i]) == null) {
+                count.put(arr[i], 0);
+            }
+            count.put(arr[i], count.get(arr[i]) + 1);
+        }
+        int[] sorted = new int[arr.length];
+        int k = 0;
+        for (Integer value : uniqueArr) {
+            for (int j = 0; j < count.get(value); j++, k++) {
+                sorted[k] = value;
+            }
+        }
+        return sorted;
     }
 }
