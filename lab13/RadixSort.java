@@ -19,58 +19,69 @@ public class RadixSort {
      */
     public static String[] sort(String[] asciis) {
         // TODO: Implement LSD Sort
-//        int maxLength = 0;
-//        for (String s : asciis) {
-//            if (s.length() > maxLength) {
-//                maxLength = s.length();
-//            }
-//        }
-//        int[][] arr = new int[asciis.length][];
-//        for (int i = 0; i < asciis.length; i++) {
-//            char[] temp = asciis[i].toCharArray();
-//            for (int j = 0; j < maxLength; j++) {
-//                if (temp.length <= j) {
-//                    arr[i][j] = -1;
-//                } else {
-//                    arr[i][j] = temp[j];
-//                }
-//            }
-//        }
-        ArrayList<String> nonBlank = new ArrayList<String>();
-        for (String s : asciis) {
-            if (!s.trim().isEmpty()) {
-                nonBlank.add(s);
-            }
-        }
-        String[] arr = (String[]) nonBlank.toArray(new String[nonBlank.size()]);
-        int W = findMax(asciis);
-        int N = asciis.length;
-        String[] temp = new String[asciis.length];
+        String[] result = new String[asciis.length];
 
-        for (int d = W - 1; d >= 0; d--) {
-            int[] count = new int[256];
-            for (int i = 0; i < N; i++) {
-                if (d > arr[i].length() - 1) {
-                    count[2]++;
-                } else {
-                    count[arr[i].charAt(d) + 1]++;
-                }
-            }
-            for (int k = 1; k < 256; k++) {
-                count[k] = count[k] + count[k - 1];
-            }
-            for (int i = 0; i < N; i++) {
-                if(d > arr[i].length() - 1){
-                    temp[count[1]++] = arr[i];
-                }else{
-                    temp[count[arr[i].charAt(d)]++] = arr[i];
-                }
-            }
-            for (int i = 0; i < N; i++) {
-                arr[i] = temp[i];
+        int maxLength = 0;
+        for (String s : asciis) {
+            if (s.length() > maxLength) {
+                maxLength = s.length();
             }
         }
-        return temp;
+        int[][] arr = new int[asciis.length][maxLength];
+        for (int i = 0; i < asciis.length; i++) {
+            char[] temp = asciis[i].toCharArray();
+            for (int j = 0; j < maxLength; j++) {
+                if (temp.length <= j) {
+                    arr[i][j] = -1;
+                } else {
+                    arr[i][j] = temp[j];
+                }
+            }
+        }
+        int n = maxLength - 1;
+        int k = 0;
+        int[][][] bucket = new int[257][arr.length][maxLength];
+        int[] order = new int[257];
+        while (n >= 0) {
+            for (int[] num : arr) {
+                int digit = num[n] + 1;
+                bucket[digit][order[digit]] = num;
+                order[digit]++;
+            }
+            for (int i = 0; i < 257; i++) {
+                if (order[i] != 0) {
+                    for (int j = 0; j < order[i]; j++) {
+                        arr[k] = bucket[i][j];
+                        k++;
+                    }
+                }
+                order[i] = 0;
+            }
+            n--;
+            k = 0;
+        }
+
+        int index = 0;
+        for (int[] i : arr) {
+            String word = new String();
+            for (int j  = 0; j < i.length; j++) {
+                if (j == maxLength - 1) {
+                    word += (char) i[j];
+                    result[index] = word;
+                    index++;
+                } else if (i[j] != -1){
+                    word += (char) i[j];
+                } else {
+                    result[index] = word;
+                    index++;
+                    //System.out.print(word);
+                    break;
+                }
+            }
+            //System.out.println();
+        }
+
+        return result;
     }
 
     private static int findMax(String[] a) {
@@ -170,6 +181,7 @@ public class RadixSort {
                 "Aaron","Isaiah","Thomas","Charles","Caleb","Josiah","Christian","Hunter","Eli","Jonathan",
                 "Connor","Landon","Adrian","Asher","Cameron","Leo","Theodore","Jeremiah","Hudson","Robert",
                 "Easton","Nolan","Nicholas","Ezra","Colton"};
+        String[] aa = new String[]{ "Ei", "Lira"};
         String[] b;
         b = sort(a);
         for(String s : b){
