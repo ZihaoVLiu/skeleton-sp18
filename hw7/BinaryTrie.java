@@ -43,7 +43,7 @@ public class BinaryTrie implements Serializable {
         while (pq.size() > 1) {
             Node left = pq.poll();
             Node right = pq.poll();
-            Node parent = new Node('\0', left.freq + left.freq, left, right);
+            Node parent = new Node('\0', left.freq + right.freq, left, right);
             pq.add(parent);
         }
         root = pq.poll();
@@ -88,8 +88,7 @@ public class BinaryTrie implements Serializable {
         traverse(n.left);
         bitSequeneceOfChar.deleteCharAt(bitSequeneceOfChar.length() - 1);
         bitSequeneceOfChar.append(1);
-        traverse(n.right);;
+        traverse(n.right);
         bitSequeneceOfChar.deleteCharAt(bitSequeneceOfChar.length() - 1);
     }
-
 }
